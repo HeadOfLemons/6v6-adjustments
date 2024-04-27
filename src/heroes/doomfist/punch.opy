@@ -49,6 +49,19 @@ rule "[doomfist/punch.opy]: Initialize rocket punch":
     # eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, OW1_DOOMFIST_PUNCH_COOLDOWN) # workshop bug (doesn't work)
 
 
+rule "[doomfist/punch.opy]: Phase out multi punch victims":
+    @Event eachPlayer
+    @Hero doomfist
+    @Condition eventPlayer.isFiringSecondaryFire()
+    @Condition not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
+
+    do:
+        getPlayersInRadius(eventPlayer, 5, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF).setStatusEffect(null, Status.PHASED_OUT, 5/44)
+        getPlayersInRadius(eventPlayer, 2, getOppositeTeam(eventPlayer.getTeam()), LosCheck.OFF)[0].clearStatusEffect(Status.PHASED_OUT)
+        wait()
+    while RULE_CONDITION
+
+
 # DO NOT switch the order of this rule with the next rule
 # The order is functionally significant
 rule "[doomfist/punch.opy]: Find wall impacted victims":

@@ -81,7 +81,7 @@ settings {
             "doomfist": {
                 "ability1Cooldown%": percent(ADJ_DOOMFIST_SLAM_CD/OW2_DOOMFIST_SLAM_CD),
                 "ability2Cooldown%": percent(ADJ_DOOMFIST_POWER_BLOCK_COOLDOWN/OW2_DOOMFIST_POWER_BLOCK_COOLDOWN),
-                "secondaryFireKb%": 0,
+                "secondaryFireKb%": 100,
                 "ultGen%": percent(OW2_DOOMFIST_ULT_COST/ADJ_DOOMFIST_ULT_COST)
             },
             "echo": {
