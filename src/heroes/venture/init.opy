@@ -23,8 +23,13 @@ rule "[venture/init.opy]: Venture":
 rule "[venture/init.opy]: Correct Venture bonus shields":
     @Event eachPlayer
     @Condition eventPlayer.hero_setup == Hero.VENTURE
-    @Condition eventPlayer.getMaxHealthOfType(Health.SHIELDS) >= 46
+    @Condition eventPlayer.getMaxHealthOfType(Health.SHIELDS) >= floor(ADJ_VENTURE_EXPLORER_SHIELDS/OW2_VENTURE_EXPLORER_SHIELDS * OW2_VENTURE_EXPLORER_SHIELDS_ULTIMATE)
     
-    eventPlayer.addHealthPool(Health.SHIELDS, 3.125, true, true)
-    waitUntil(eventPlayer.getMaxHealthOfType(Health.SHIELDS) < 49, Math.INFINITY)
+    eventPlayer.addHealthPool(
+        Health.SHIELDS,
+        ADJ_VENTURE_EXPLORER_SHIELDS_ULTIMATE - (ADJ_VENTURE_EXPLORER_SHIELDS/OW2_VENTURE_EXPLORER_SHIELDS * OW2_VENTURE_EXPLORER_SHIELDS_ULTIMATE),
+        true,
+        true)
+    # subtract 1 to account for rounding error
+    waitUntil(eventPlayer.getMaxHealthOfType(Health.SHIELDS) < (ADJ_VENTURE_EXPLORER_SHIELDS_ULTIMATE - 1), Math.INFINITY)
     removeHealthPool(getLastCreatedHealthPool())
