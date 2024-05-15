@@ -15,6 +15,8 @@ rule "[wreckingball/init.opy]: Wrecking Ball":
     #eventPlayer.startScalingSize(0.9, true)
     #eventPlayer.setJumpVerticalSpeed(104)
 
+    setBaseDamage(eventPlayer, ADJ_WRECKING_BALL_MINEFIELD_DAMAGE/OW2_WRECKING_BALL_MINEFIELD_DAMAGE)
+
     eventPlayer.call_init = false
 
 
@@ -26,6 +28,41 @@ rule "[wreckingball/init.opy]: Force Grappling Hook cooldown":
     waitUntil(eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) > 0.1, 999999986991104)
     eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE, 5)
 
+
+rule "[wreckingball/init.opy]: Increase Piledriver damage":
+    @Event playerDealtDamage
+    @Condition eventPlayer.hero_setup == Hero.HAMMOND
+    @Condition eventAbility == Button.CROUCH
+
+    damage(
+        victim, 
+        attacker, 
+        ((ADJ_WRECKING_BALL_PILEDRIVER_DAMAGE/OW2_WRECKING_BALL_PILEDRIVER_DAMAGE) \
+        * (eventDamage/eventPlayer._base_damage_scalar) \
+        - eventDamage)/eventPlayer._base_damage_scalar)
+
+
+rule "[wreckingball/init.opy]: Increase Fireball impact damage":
+    @Event playerDealtDamage
+    @Condition eventPlayer.hero_setup == Hero.HAMMOND
+    @Condition eventAbility == Button.SECONDARY_FIRE
+        
+        damage(
+            victim, 
+            attacker, 
+            ((ADJ_WRECKING_BALL_FIREBALL_DAMAGE/OW2_WRECKING_BALL_FIREBALL_DAMAGE) \
+            * (eventDamage/eventPlayer._base_damage_scalar) \
+            - eventDamage)/eventPlayer._base_damage_scalar)
+
+
+rule "[wreckingball/init.opy]: Increase Quad Cannons and Melee damage":
+        @Event eachPlayer
+        @Condition eventPlayer.hero_setup == Hero.HAMMOND
+        @Condition eventPlayer.isUsingAbility1()
+            
+        eventPlayer.setDamageDealt(percent(ADJ_WRECKING_BALL_MINEFIELD_DAMAGE/OW2_WRECKING_BALL_MINEFIELD_DAMAGE))
+        waitUntil(not eventPlayer.isUsingAbility1(), 99999)
+        eventPlayer.setDamageDealt(100)
 
 /*
 rule "Correct Adaptive Shields overhealth while outside spawn rooms":
